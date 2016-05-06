@@ -1,5 +1,7 @@
 # Porter Stemmer
 
+[Documentation](https://samgiles.github.io/porter-stemmer/porter_stemmer/)
+
 An implementation of [the Porter stemming algorithm](http://snowball.tartarus.org/algorithms/porter/stemmer.html) in Rust. It operates over
 grapheme clusters rather than characters, so your input stream can mixed
 content.

@@ -1,10 +1,10 @@
 [package]
 name = "porter-stemmer"
 description = "Flexible and unicode friendly, Porter stemmer implementation"
-homepage = "https://samgiles.github.io/porter-stemmer/porter-stemmer"
-documentation = "https://samgiles.github.io/porter-stemmer/porter-stemmer"
+homepage = "https://samgiles.github.io/porter-stemmer/porter_stemmer"
+documentation = "https://samgiles.github.io/porter-stemmer/porter_stemmer"
 repository = "https://github.com/samgiles/porter-stemmer"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Sam Giles <sam.e.giles@gmail.com>"]
 keywords = ["porter", "stemmer", "stem", "text", "normalization"]
 license = "MPL-2.0"
