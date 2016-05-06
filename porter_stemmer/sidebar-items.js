@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["stem","Given a word, return its stemmed form"],["stem_tokenized","Take a word as a Vector of grapheme clusters, and return the stemmed equivalent using Porter's stemming algorithm."]]});
