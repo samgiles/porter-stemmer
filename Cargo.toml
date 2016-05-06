@@ -1,0 +1,13 @@
+[package]
+name = "porter-stemmer"
+description = "Flexible and unicode friendly, Porter stemmer implementation"
+homepage = "https://samgiles.github.io/porter-stemmer/porter-stemmer"
+documentation = "https://samgiles.github.io/porter-stemmer/porter-stemmer"
+repository = "https://github.com/samgiles/porter-stemmer"
+version = "0.1.0"
+authors = ["Sam Giles <sam.e.giles@gmail.com>"]
+keywords = ["porter", "stemmer", "stem", "normalization", "information retrieval"]
+license = "MPL-2.0"
+
+[dependencies]
+unicode-segmentation = "0.1.2"
