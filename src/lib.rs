@@ -2,11 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#![feature(test)]
-
-#[cfg(test)]
-extern crate test;
-
 extern crate unicode_segmentation;
 
 use unicode_segmentation::UnicodeSegmentation;
@@ -646,263 +641,238 @@ fn phase_5b(word: Vec<&str>) -> Vec<&str> {
         word
     }
 }
-#[test]
-fn test_real_vowel() {
-    assert!(real_vowel("a"));
-    assert!(real_vowel("e"));
-    assert!(real_vowel("i"));
-    assert!(real_vowel("o"));
-    assert!(real_vowel("u"));
-    assert!(!real_vowel("b"));
-}
-
-#[test]
-fn test_real_consonant() {
-    assert!(!real_consonant("a"));
-    assert!(!real_consonant("e"));
-    assert!(!real_consonant("i"));
-    assert!(!real_consonant("o"));
-    assert!(!real_consonant("u"));
-    assert!(real_consonant("b"));
-}
 
 #[cfg(test)]
-fn tokenise<'a>(input: &'a str) -> Vec<&'a str> {
-    use unicode_segmentation::UnicodeSegmentation;
-    input.graphemes(true).collect::<Vec<&'a str>>()
-}
-
-#[cfg(test)]
-fn assert_fn<'a>(f: fn(Vec<&'a str>) -> Vec<&'a str>, input: &'a str, expected: &'a str) {
-    let input = tokenise(input);
-    let expected = tokenise(expected);
-
-    assert_eq!(&f(input), &expected);
-}
-
-
-#[test]
-fn test_porter_character_types() {
-    let graphemes = tokenise("toy");
-
-    assert!(porter_consonant(&graphemes, 0));
-    assert!(porter_vowel(&graphemes, 1));
-    assert!(porter_consonant(&graphemes, 2));
-
-    let graphemes = tokenise("syzygy");
-    assert!(porter_consonant(&graphemes, 0));
-    assert!(porter_vowel(&graphemes, 1));
-    assert!(porter_consonant(&graphemes, 2));
-    assert!(porter_vowel(&graphemes, 3));
-    assert!(porter_consonant(&graphemes, 4));
-    assert!(porter_vowel(&graphemes, 5));
-}
-
-#[test]
-fn test_ends_double_porters_consonant() {
-   let graphemes = tokenise("sell");
-   assert!(ends_double_porters_consonant(&graphemes));
-
-   let graphemes = tokenise("greyy");
-   assert!(!ends_double_porters_consonant(&graphemes));
-
-   let graphemes = tokenise("see");
-   assert!(!ends_double_porters_consonant(&graphemes));
-}
-
-#[test]
-fn test_contains_vowel() {
-    let graphemes = tokenise("toy");
-    assert!(contains_porter_vowel(&graphemes));
-
-    let graphemes = tokenise("syzygy");
-    assert!(contains_porter_vowel(&graphemes));
-
-    let graphemes = tokenise("trjk");
-    assert!(!contains_porter_vowel(&graphemes));
-}
-
-#[test]
-fn test_ends_star_o() {
-    let graphemes = tokenise("awhil");
-    assert!(ends_star_o(&graphemes));
-
-    let graphemes = tokenise("mix");
-    assert!(!ends_star_o(&graphemes));
-
-    let graphemes = tokenise("dew");
-    assert!(!ends_star_o(&graphemes));
-
-    let graphemes = tokenise("day");
-    assert!(!ends_star_o(&graphemes));
-}
-
-#[test]
-fn test_measure() {
-    let graphemes = tokenise("crepuscular");
-    assert_eq!(4, measure(&graphemes[..]));
-
-    let graphemes = tokenise("bacon");
-    assert_eq!(2, measure(&graphemes[..]));
-
-    let graphemes = tokenise("abacus");
-    assert_eq!(3, measure(&graphemes[..]));
-
-
-    let graphemes = tokenise("paackkeeer");
-    assert_eq!(2, measure(&graphemes[..]));
-
-    let graphemes = tokenise("syzygy");
-    assert_eq!(2, measure(&graphemes[..]));
-
-}
-
-#[test]
-fn test_phase_one() {
-    assert_fn(phase_one_a, "caresses", "caress");
-    assert_fn(phase_one_a, "caress", "caress");
-    assert_fn(phase_one_a, "ponies", "poni");
-    assert_fn(phase_one_a, "cats", "cat");
-}
-
-#[test]
-fn test_phase_one_b() {
-    assert_fn(phase_one_b, "feed", "feed");
-    assert_fn(phase_one_b, "agreed", "agree");
-    assert_fn(phase_one_b, "plastered", "plaster");
-    assert_fn(phase_one_b, "bled", "bled");
-    assert_fn(phase_one_b, "motoring", "motor");
-    assert_fn(phase_one_b, "sing", "sing");
-}
-
-#[test]
-fn test_phase_one_b_substep() {
-    assert_fn(phase_one_b_substep, "conflat", "conflate");
-    assert_fn(phase_one_b_substep, "troubl", "trouble");
-    assert_fn(phase_one_b_substep, "siz", "size");
-    assert_fn(phase_one_b_substep, "hopp", "hop");
-    assert_fn(phase_one_b_substep, "hiss", "hiss");
-    assert_fn(phase_one_b_substep, "fizz", "fizz");
-    assert_fn(phase_one_b_substep, "fall", "fall");
-    assert_fn(phase_one_b_substep, "fail", "fail");
-    assert_fn(phase_one_b_substep, "fil", "file");
-}
-
-#[test]
-fn test_phase_one_c() {
-    assert_fn(phase_one_c, "happy", "happi");
-}
-
-#[test]
-#[ignore]
-fn test_phase_one_c_sky() {
-    assert_fn(phase_one_c, "sky", "sky");
-}
-
-#[test]
-fn test_phase_two() {
-    assert_fn(phase_two, "relational", "relate");
-    assert_fn(phase_two, "conditional", "condition");
-    assert_fn(phase_two, "rational", "rational");
-    assert_fn(phase_two, "valenci", "valence");
-    assert_fn(phase_two, "hesitanci", "hesitance");
-    assert_fn(phase_two, "digitizer", "digitize");
-    assert_fn(phase_two, "conformabli", "conformable");
-    assert_fn(phase_two, "radicalli", "radical");
-    assert_fn(phase_two, "differentli", "different");
-    assert_fn(phase_two, "vileli", "vile");
-    assert_fn(phase_two, "analogousli", "analogous");
-    assert_fn(phase_two, "vietnamization", "vietnamize");
-    assert_fn(phase_two, "predication", "predicate");
-    assert_fn(phase_two, "operator", "operate");
-    assert_fn(phase_two, "feudalism", "feudal");
-    assert_fn(phase_two, "decisiveness", "decisive");
-    assert_fn(phase_two, "hopefulness", "hopeful");
-    assert_fn(phase_two, "callousness", "callous");
-    assert_fn(phase_two, "formaliti", "formal");
-    assert_fn(phase_two, "sensitiviti", "sensitive");
-    assert_fn(phase_two, "sensibiliti", "sensible");
-}
-
-#[test]
-fn test_phase_three() {
-    assert_fn(phase_three, "triplicate", "triplic");
-    assert_fn(phase_three, "formative", "form");
-    assert_fn(phase_three, "formalize", "formal");
-    assert_fn(phase_three, "electriciti", "electric");
-    assert_fn(phase_three, "electrical", "electric");
-    assert_fn(phase_three, "hopeful", "hope");
-    assert_fn(phase_three, "goodness", "good");
-}
-
-#[test]
-fn test_phase_four() {
-    assert_fn(phase_four, "revival", "reviv");
-    assert_fn(phase_four, "allowance", "allow");
-    assert_fn(phase_four, "inference", "infer");
-    assert_fn(phase_four, "airliner", "airlin");
-    assert_fn(phase_four, "gyroscopic", "gyroscop");
-    assert_fn(phase_four, "adjustable", "adjust");
-    assert_fn(phase_four, "defensible", "defens");
-    assert_fn(phase_four, "irritant", "irrit");
-    assert_fn(phase_four, "replacement", "replac");
-    assert_fn(phase_four, "adjustment", "adjust");
-    assert_fn(phase_four, "dependent", "depend");
-    assert_fn(phase_four, "adoption", "adopt");
-    assert_fn(phase_four, "homologou", "homolog");
-    assert_fn(phase_four, "communism", "commun");
-    assert_fn(phase_four, "activate", "activ");
-    assert_fn(phase_four, "angulariti", "angular");
-    assert_fn(phase_four, "homologous", "homolog");
-    assert_fn(phase_four, "effective", "effect");
-    assert_fn(phase_four, "bowdlerize", "bowdler");
-}
-
-#[test]
-fn test_phase_five_a() {
-    // 5a
-    assert_fn(phase_5a, "probate", "probat");
-    assert_fn(phase_5a, "rate", "rate");
-    assert_fn(phase_5a, "cease", "ceas");
-}
-
-#[test]
-fn test_phase_five_b() {
-    // 5b
-    assert_fn(phase_5b, "controll", "control");
-    assert_fn(phase_5b, "roll", "roll");
-}
-
-#[test]
-fn test_stem_tokenized() {
-    assert_fn(stem_tokenized, "surveillance", "surveil");
-}
-
-#[cfg(test)]
-mod test_bench {
-    use std::fs::File;
-    use std::io::Read;
+mod tests {
     use super::*;
-    use test::Bencher;
-    use unicode_segmentation::UnicodeSegmentation;
 
-    #[bench]
-    fn bench_stem(b: &mut Bencher) {
-        let mut input     = File::open("input.txt").unwrap();
-        let mut expected  = File::open("expected.txt").unwrap();
+    #[test]
+    fn test_real_vowel() {
+        assert!(real_vowel("a"));
+        assert!(real_vowel("e"));
+        assert!(real_vowel("i"));
+        assert!(real_vowel("o"));
+        assert!(real_vowel("u"));
+        assert!(!real_vowel("b"));
+    }
 
-        let mut input_s = String::new();
-        input.read_to_string(&mut input_s).unwrap();
+    #[test]
+    fn test_real_consonant() {
+        assert!(!real_consonant("a"));
+        assert!(!real_consonant("e"));
+        assert!(!real_consonant("i"));
+        assert!(!real_consonant("o"));
+        assert!(!real_consonant("u"));
+        assert!(real_consonant("b"));
+    }
 
-        let mut expected_s = String::new();
-        expected.read_to_string(&mut expected_s).unwrap();
+    fn tokenise<'a>(input: &'a str) -> Vec<&'a str> {
+        use unicode_segmentation::UnicodeSegmentation;
+        input.graphemes(true).collect::<Vec<&'a str>>()
+    }
 
-        let input = input_s.graphemes(true).collect::<Vec<&str>>();
-        let expected = input_s.graphemes(true).collect::<Vec<&str>>();
+    fn assert_fn<'a>(f: fn(Vec<&'a str>) -> Vec<&'a str>, input: &'a str, expected: &'a str) {
+        let input = tokenise(input);
+        let expected = tokenise(expected);
 
-        b.iter(|| {
-            let input = input.clone();
-            assert_eq!(expected, stem_tokenized(input));
-        });
+        assert_eq!(&f(input), &expected);
+    }
+
+
+    #[test]
+    fn test_porter_character_types() {
+        let graphemes = tokenise("toy");
+
+        assert!(porter_consonant(&graphemes, 0));
+        assert!(porter_vowel(&graphemes, 1));
+        assert!(porter_consonant(&graphemes, 2));
+
+        let graphemes = tokenise("syzygy");
+        assert!(porter_consonant(&graphemes, 0));
+        assert!(porter_vowel(&graphemes, 1));
+        assert!(porter_consonant(&graphemes, 2));
+        assert!(porter_vowel(&graphemes, 3));
+        assert!(porter_consonant(&graphemes, 4));
+        assert!(porter_vowel(&graphemes, 5));
+    }
+
+    #[test]
+    fn test_ends_double_porters_consonant() {
+    let graphemes = tokenise("sell");
+    assert!(ends_double_porters_consonant(&graphemes));
+
+    let graphemes = tokenise("greyy");
+    assert!(!ends_double_porters_consonant(&graphemes));
+
+    let graphemes = tokenise("see");
+    assert!(!ends_double_porters_consonant(&graphemes));
+    }
+
+    #[test]
+    fn test_contains_vowel() {
+        let graphemes = tokenise("toy");
+        assert!(contains_porter_vowel(&graphemes));
+
+        let graphemes = tokenise("syzygy");
+        assert!(contains_porter_vowel(&graphemes));
+
+        let graphemes = tokenise("trjk");
+        assert!(!contains_porter_vowel(&graphemes));
+    }
+
+    #[test]
+    fn test_ends_star_o() {
+        let graphemes = tokenise("awhil");
+        assert!(ends_star_o(&graphemes));
+
+        let graphemes = tokenise("mix");
+        assert!(!ends_star_o(&graphemes));
+
+        let graphemes = tokenise("dew");
+        assert!(!ends_star_o(&graphemes));
+
+        let graphemes = tokenise("day");
+        assert!(!ends_star_o(&graphemes));
+    }
+
+    #[test]
+    fn test_measure() {
+        let graphemes = tokenise("crepuscular");
+        assert_eq!(4, measure(&graphemes[..]));
+
+        let graphemes = tokenise("bacon");
+        assert_eq!(2, measure(&graphemes[..]));
+
+        let graphemes = tokenise("abacus");
+        assert_eq!(3, measure(&graphemes[..]));
+
+
+        let graphemes = tokenise("paackkeeer");
+        assert_eq!(2, measure(&graphemes[..]));
+
+        let graphemes = tokenise("syzygy");
+        assert_eq!(2, measure(&graphemes[..]));
+
+    }
+
+    #[test]
+    fn test_phase_one() {
+        assert_fn(phase_one_a, "caresses", "caress");
+        assert_fn(phase_one_a, "caress", "caress");
+        assert_fn(phase_one_a, "ponies", "poni");
+        assert_fn(phase_one_a, "cats", "cat");
+    }
+
+    #[test]
+    fn test_phase_one_b() {
+        assert_fn(phase_one_b, "feed", "feed");
+        assert_fn(phase_one_b, "agreed", "agree");
+        assert_fn(phase_one_b, "plastered", "plaster");
+        assert_fn(phase_one_b, "bled", "bled");
+        assert_fn(phase_one_b, "motoring", "motor");
+        assert_fn(phase_one_b, "sing", "sing");
+    }
+
+    #[test]
+    fn test_phase_one_b_substep() {
+        assert_fn(phase_one_b_substep, "conflat", "conflate");
+        assert_fn(phase_one_b_substep, "troubl", "trouble");
+        assert_fn(phase_one_b_substep, "siz", "size");
+        assert_fn(phase_one_b_substep, "hopp", "hop");
+        assert_fn(phase_one_b_substep, "hiss", "hiss");
+        assert_fn(phase_one_b_substep, "fizz", "fizz");
+        assert_fn(phase_one_b_substep, "fall", "fall");
+        assert_fn(phase_one_b_substep, "fail", "fail");
+        assert_fn(phase_one_b_substep, "fil", "file");
+    }
+
+    #[test]
+    fn test_phase_one_c() {
+        assert_fn(phase_one_c, "happy", "happi");
+    }
+
+    #[test]
+    #[ignore]
+    fn test_phase_one_c_sky() {
+        assert_fn(phase_one_c, "sky", "sky");
+    }
+
+    #[test]
+    fn test_phase_two() {
+        assert_fn(phase_two, "relational", "relate");
+        assert_fn(phase_two, "conditional", "condition");
+        assert_fn(phase_two, "rational", "rational");
+        assert_fn(phase_two, "valenci", "valence");
+        assert_fn(phase_two, "hesitanci", "hesitance");
+        assert_fn(phase_two, "digitizer", "digitize");
+        assert_fn(phase_two, "conformabli", "conformable");
+        assert_fn(phase_two, "radicalli", "radical");
+        assert_fn(phase_two, "differentli", "different");
+        assert_fn(phase_two, "vileli", "vile");
+        assert_fn(phase_two, "analogousli", "analogous");
+        assert_fn(phase_two, "vietnamization", "vietnamize");
+        assert_fn(phase_two, "predication", "predicate");
+        assert_fn(phase_two, "operator", "operate");
+        assert_fn(phase_two, "feudalism", "feudal");
+        assert_fn(phase_two, "decisiveness", "decisive");
+        assert_fn(phase_two, "hopefulness", "hopeful");
+        assert_fn(phase_two, "callousness", "callous");
+        assert_fn(phase_two, "formaliti", "formal");
+        assert_fn(phase_two, "sensitiviti", "sensitive");
+        assert_fn(phase_two, "sensibiliti", "sensible");
+    }
+
+    #[test]
+    fn test_phase_three() {
+        assert_fn(phase_three, "triplicate", "triplic");
+        assert_fn(phase_three, "formative", "form");
+        assert_fn(phase_three, "formalize", "formal");
+        assert_fn(phase_three, "electriciti", "electric");
+        assert_fn(phase_three, "electrical", "electric");
+        assert_fn(phase_three, "hopeful", "hope");
+        assert_fn(phase_three, "goodness", "good");
+    }
+
+    #[test]
+    fn test_phase_four() {
+        assert_fn(phase_four, "revival", "reviv");
+        assert_fn(phase_four, "allowance", "allow");
+        assert_fn(phase_four, "inference", "infer");
+        assert_fn(phase_four, "airliner", "airlin");
+        assert_fn(phase_four, "gyroscopic", "gyroscop");
+        assert_fn(phase_four, "adjustable", "adjust");
+        assert_fn(phase_four, "defensible", "defens");
+        assert_fn(phase_four, "irritant", "irrit");
+        assert_fn(phase_four, "replacement", "replac");
+        assert_fn(phase_four, "adjustment", "adjust");
+        assert_fn(phase_four, "dependent", "depend");
+        assert_fn(phase_four, "adoption", "adopt");
+        assert_fn(phase_four, "homologou", "homolog");
+        assert_fn(phase_four, "communism", "commun");
+        assert_fn(phase_four, "activate", "activ");
+        assert_fn(phase_four, "angulariti", "angular");
+        assert_fn(phase_four, "homologous", "homolog");
+        assert_fn(phase_four, "effective", "effect");
+        assert_fn(phase_four, "bowdlerize", "bowdler");
+    }
+
+    #[test]
+    fn test_phase_five_a() {
+        // 5a
+        assert_fn(phase_5a, "probate", "probat");
+        assert_fn(phase_5a, "rate", "rate");
+        assert_fn(phase_5a, "cease", "ceas");
+    }
+
+    #[test]
+    fn test_phase_five_b() {
+        // 5b
+        assert_fn(phase_5b, "controll", "control");
+        assert_fn(phase_5b, "roll", "roll");
+    }
+
+    #[test]
+    fn test_stem_tokenized() {
+        assert_fn(stem_tokenized, "surveillance", "surveil");
     }
 }
