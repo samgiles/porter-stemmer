@@ -4,10 +4,10 @@ description = "Flexible and unicode friendly, Porter stemmer implementation"
 homepage = "https://samgiles.github.io/porter-stemmer/porter_stemmer"
 documentation = "https://samgiles.github.io/porter-stemmer/porter_stemmer"
 repository = "https://github.com/samgiles/porter-stemmer"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Sam Giles <sam.e.giles@gmail.com>"]
 keywords = ["porter", "stemmer", "stem", "text", "normalization"]
 license = "MPL-2.0"
 
 [dependencies]
-unicode-segmentation = "0.1.2"
+unicode-segmentation = "1.3.0"
